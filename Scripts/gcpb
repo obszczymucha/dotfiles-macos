@@ -1,0 +1,91 @@
+#!/usr/bin/env zsh
+set -e
+
+DESKTOP_BRANCH="i9"
+LAPTOP_BRANCH="xps13"
+
+function in_git_repo_check() {
+  if [[ ! -d ".git/" ]]; then
+    echo "Not a git repository."
+    exit 1
+  fi
+
+  local current_branch=$(git rev-parse --abbrev-ref HEAD)
+  local this_branch=$1
+  local that_branch=$2
+
+  case $current_branch in
+    ${DESKTOP_BRANCH})
+      eval $this_branch=$current_branch
+      eval $that_branch=$LAPTOP_BRANCH
+      ;;
+    ${LAPTOP_BRANCH})
+      eval $this_branch=$current_branch
+      eval $that_branch=$DESKTOP_BRANCH
+      ;;
+    *)
+      echo "Unknown git branch. Aborting."
+      exit 2
+      ;;
+  esac
+}
+
+function check_for_untracked_files() {
+  set +e
+  git status | grep -E "Untracked files|Changes not staged" > /dev/null
+  local result=$?
+  set -e
+
+  if [[ $result -eq 0 ]]; then
+    echo "There are untracked or changed files. Add them first!"
+    exit 5
+  fi
+}
+
+function check_commit_name() {
+  local commit_name=$1
+
+  if [[ ! -n $commit_name ]]; then
+    echo "Usage: $ZSH_ARGZERO:t <commit_name>"
+    exit 3
+  fi
+}
+
+function check_commit() {
+  local commit=$1
+  local len=$(echo -n $commit | wc -m)
+
+  if [[ ! $len -eq 7 ]]; then
+    echo "Error (invalid commit: $commit)!"
+    exit 4
+  fi
+}
+
+function run() {
+  local current_time=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  local commit_name=$(echo $1 | sed -E "s/(.*[^\.])(\.*$)/\1 \($current_time\)\2/g")
+
+  echo "This branch: $THIS_BRANCH"
+  echo "That branch: $THAT_BRANCH"
+  echo "Commit name: $commit_name"
+
+  local commit=$(git commit -m "$commit_name" | grep $THIS_BRANCH | sed -E 's/^[^ ]+ (.+)].*$/\1/g')
+
+  check_commit $commit
+  git fetch
+  git rebase origin/$THIS_BRANCH
+  git push origin $THIS_BRANCH
+  git checkout $THAT_BRANCH
+  git rebase origin/$THAT_BRANCH
+  git cherry-pick --strategy=recursive -X theirs $commit
+  git push origin $THAT_BRANCH
+  git checkout $THIS_BRANCH
+}
+
+in_git_repo_check THIS_BRANCH THAT_BRANCH
+check_for_untracked_files
+COMMIT_NAME=$@
+check_commit_name $COMMIT_NAME
+
+run $COMMIT_NAME
+

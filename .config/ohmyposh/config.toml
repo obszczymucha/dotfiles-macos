@@ -1,0 +1,107 @@
+#:schema https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+
+version = 2
+final_space = true
+console_title_template = "{{ .Shell }} in {{ .Folder }}"
+
+[palette]
+  path = "#0784ad"
+  path_right = "#00a6f2"
+  git = "#47ba31"
+  git_detached = "#757575"
+  git_staged = "#50ef50"
+  git_unstaged = "#f94845"
+  git_untracked = "#9e9e9e"
+  git_stash = "#00a6f2"
+  git_ahead = "#ffa730"
+  git_behind = "#ffa730"
+  error = "red"
+  ok = "#00b000"
+  time = "#757575"
+  secondary = "#009000"
+  remote_hostname_tag = "yellow"
+  root = "#ff6070"
+
+[[blocks]]
+  type = "prompt"
+  alignment = "left"
+  newline = true
+
+  [[blocks.segments]]
+    type = "path"
+    style = "plain"
+    foreground = "p:path"
+    background = "transparent"
+    template = "{{ .Path }}"
+
+    [blocks.segments.properties]
+      style = "full"
+      right_format = "<p:path_right>%s</>"
+
+  [[blocks.segments]]
+    type = "text"
+    style = "plain"
+    foreground = "p:remote_hostname_tag"
+    background = "transparent"
+    template = "{{ if and .Env.SSH_CONNECTION .Env.ZSH_PROMPT_HOSTNAME_TAG }} {{ .Env.ZSH_PROMPT_HOSTNAME_TAG }}{{ end }}"
+
+  [[blocks.segments]]
+    type = "git"
+    style = "plain"
+    foreground = "p:git"
+    background = "transparent"
+    template = " {{ if .Detached }}<p:git_detached>@{{ .ShortHash }}</>{{ else }}{{ .HEAD }}{{ end }}{{ if gt (add .Staging.Added .Staging.Modified .Staging.Deleted) 0 }} <p:git_staged>+{{ add .Staging.Added .Staging.Modified .Staging.Deleted }}</>{{ end }}{{ if gt (add .Working.Added .Working.Modified .Working.Deleted .Working.Unmerged) 0 }} <p:git_unstaged>!{{ add .Working.Added .Working.Modified .Working.Deleted .Working.Unmerged }}</>{{ end }}{{ if gt .Working.Untracked 0 }} <p:git_untracked>?{{ .Working.Untracked }}</>{{ end }}{{ if gt .StashCount 0 }} <p:git_stash>*{{ .StashCount }}</>{{ end }}{{if or (gt .Ahead 0) (gt .Behind 0)}} {{ end }}{{ if gt .Ahead 0 }}<p:git_ahead>\u2191{{ .Ahead }}</>{{ end }}{{ if gt .Behind 0 }}<p:git_behind>\u2193{{ .Behind }}</>{{ end }}"
+
+    [blocks.segments.properties]
+      branch_icon = ""
+      branch_max_length = 25
+      fetch_status = true
+      native_fallback = true
+
+[[blocks]]
+  type = "prompt"
+  alignment = "left"
+
+  [[blocks.segments]]
+    type = "root"
+    style = "plain"
+    foreground = "p:root"
+    background = "transparent"
+    template = " \uf0e7"
+
+  [[blocks.segments]]
+    type = "text"
+    style = "plain"
+    foreground_templates = [
+      "{{if ne .Code 0}}p:error{{end}}",
+      "{{if eq .Code 0}}p:ok{{end}}"
+    ]
+    background = "transparent"
+    template = " >"
+
+[[blocks]]
+  type = "rprompt"
+  alignment = "right"
+
+  [[blocks.segments]]
+    type = "time"
+    style = "plain"
+    foreground = "p:time"
+    background = "transparent"
+
+    [blocks.segments.properties]
+      time_format = "15:04"
+
+[transient_prompt]
+  foreground_templates = [
+    "{{if ne .Code 0}}p:error{{end}}",
+    "{{if eq .Code 0}}p:ok{{end}}"
+  ]
+  background = "transparent"
+  template = "> "
+
+[secondary_prompt]
+  foreground = "p:secondary"
+  background = "transparent"
+  template = ">> "
+

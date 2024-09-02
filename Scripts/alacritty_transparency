@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+CONFIG="${HOME}/.dotfiles/current/.config/alacritty/alacritty.toml}"
+
+run() {
+  current_value=$(sed -n 's/^transparent_background_colors = \([0-9.]*\)/\1/p' "$CONFIG")
+
+  if [[ $current_value == "true" ]]; then
+    new_value="false"
+  else
+    new_value="true"
+  fi
+
+  sed -i "s/^transparent_background_colors = $current_value/transparent_background_colors = $new_value/" "$CONFIG"
+}
+
+run "$@"

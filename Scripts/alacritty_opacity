@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+CONFIG="${HOME}/.dotfiles/current/.config/alacritty/alacritty.toml"
+
+show_usage() {
+  echo "Usage: $0 <+|->"
+}
+
+validate_arguments() {
+  if [[ $# -ne 1 || ($1 != "+" && $1 != "-") ]]; then
+    show_usage
+    exit 1
+  fi
+}
+
+run() {
+  current_value=$(gsed -n 's/^opacity = \([0-9.]*\)/\1/p' "$CONFIG")
+  
+  if [[ $1 == "+" ]]; then
+    new_value=$(awk -v current="$current_value" 'BEGIN{result=current+0.05; if(result>1) result=1; else if(result<0) result=0; print result}')
+  else
+    new_value=$(awk -v current="$current_value" 'BEGIN{result=current-0.05; if(result<0) result=0; else if(result>1) result=1; print result}')
+  fi
+  
+  gsed -i "s/^opacity = $current_value/opacity = $new_value/" "$CONFIG"
+}
+
+validate_arguments "$@"
+run "$@"

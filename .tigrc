@@ -1,0 +1,5 @@
+color cursor color15 color55
+set main-view-id-display = yes
+set vertical_split = horizontal
+bind generic y @sh -c "git rev-parse --short %(commit) | xargs echo -n | $CLIP"
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ $# -lt 2 ] ; then
+    echo "Usage: $0 <windows_encoded_filename> <utf-8_filename>"
+    exit 1
+fi
+
+iconv -f Windows-1250 -t utf-8 "$1" > "$2"
+

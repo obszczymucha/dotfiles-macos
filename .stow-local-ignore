@@ -1,0 +1,12 @@
+.Scripts
+.SystemSetup
+.git
+.gitignore
+.tmux.messages
+.wallpaper.png
+Scripts
+SystemSetup
+TODO
+root
+zsh-completions
+zshrc
