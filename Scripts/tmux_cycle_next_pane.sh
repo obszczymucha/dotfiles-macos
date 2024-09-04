@@ -50,6 +50,11 @@ main() {
 
   local next_window_index
   next_window_index=$((current_window_index + 1))
+
+  if [[ $next_window_index -gt $panes ]]; then
+    return
+  fi
+
   window_name=$(tmux display-message -p -t "$next_window_index" '#{window_name}')
   tmux set-option @window-name "$window_name"
 
