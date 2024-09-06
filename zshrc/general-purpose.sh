@@ -71,19 +71,19 @@ function fn() {
     builtin_type=$(builtin type "$funcname")
 
     local sed_expression="s/^${funcname} is a shell function from (.+)\$/\\1/g"
-    full_path=$(echo "$builtin_type" | grep "is a shell function from" | sed -E "$sed_expression")
+    full_path=$(echo "$builtin_type" | ggrep "is a shell function from" | gsed -E "$sed_expression")
 
     if [[ -z "$full_path" ]]; then
-      if ! echo "$builtin_type" | grep "is an alias for" > /dev/null; then
+      if ! echo "$builtin_type" | ggrep "is an alias for" > /dev/null; then
         echo "$builtin_type"
         return
       fi
 
       local grep_expression="^alias ${funcname} *="
       # shellcheck disable=2046
-      read -r full_path line_number <<< $(grep -nr "$grep_expression" "$search_dir" | head -n 1 | sed -E 's/^(.+):([0-9]+):.*$/\1 \2/g')
+      read -r full_path line_number <<< $(ggrep -nr "$grep_expression" "$search_dir" | head -n 1 | gsed -E 's/^(.+):([0-9]+):.*$/\1 \2/g')
     else
-      line_number=$(grep -En "(^${funcname}\(\)| ${funcname}\(\))" "$full_path" | head -n 1 | sed -E 's/^([0-9]+):.*$/\1/g')
+      line_number=$(ggrep -En "(^${funcname}\(\)| ${funcname}\(\))" "$full_path" | head -n 1 | gsed -E 's/^([0-9]+):.*$/\1/g')
     fi
 
     if [[ -z "$full_path" ]]; then
@@ -97,12 +97,12 @@ function fn() {
 
   local grep_expression="^alias ${funcname} *="
   # shellcheck disable=2046
-  read -r full_path line_number <<< $(rg -n "$grep_expression" "$search_dir" | head -n 1 | sed -E 's/^(.+):([0-9]+):.*$/\1 \2/g')
+  read -r full_path line_number <<< $(rg -n "$grep_expression" "$search_dir" | head -n 1 | gsed -E 's/^(.+):([0-9]+):.*$/\1 \2/g')
 
   if [[ -z "$full_path" ]]; then
     local grep_expression="^(${funcname}\(\)|function ${funcname}\(\))"
     # shellcheck disable=2046
-    read -r full_path line_number <<< $(rg -En "$grep_expression" "$search_dir" | head -n 1 | sed -E 's/^(.+):([0-9]+):.*$/\1 \2/g')
+    read -r full_path line_number <<< $(rg -En "$grep_expression" "$search_dir" | head -n 1 | gsed -E 's/^(.+):([0-9]+):.*$/\1 \2/g')
   fi
 
   if [[ -z "$full_path" ]]; then
