@@ -1208,8 +1208,14 @@ key = "N"
 mode = "Vi|~Search"
 mods = "Shift"
 
+# [[keyboard.bindings]]
+# chars = "\u001B[1;5Q"
+# key = "Space"
+# mods = "Shift"
+#
+
 [[keyboard.bindings]]
-chars = "\u001B[1;5Q"
+chars = " "
 key = "Space"
 mods = "Shift"
 
