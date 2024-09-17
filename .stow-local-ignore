@@ -1,12 +1,8 @@
 .Scripts
-.SystemSetup
 .git
 .gitignore
 .tmux.messages
-.wallpaper.png
+keybindings
 Scripts
-SystemSetup
 TODO
-root
-zsh-completions
 zshrc
