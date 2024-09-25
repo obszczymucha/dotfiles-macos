@@ -9,8 +9,5 @@ case "$ZSH_PROMPT_HOSTNAME_TAG" in
   "xps13")
     source "$ZSHRC_DIR/xps13.sh"
     ;;
-  "cba")
-    source "$ZSHRC_DIR/cba.sh"
-    ;;
 esac
 
