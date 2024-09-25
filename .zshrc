@@ -2,11 +2,7 @@
 export DOTFILES_DIR="$HOME/.dotfiles/current"
 export SCRIPTS_DIR="$DOTFILES_DIR/Scripts"
 export ZSHRC_DIR="$DOTFILES_DIR"/zshrc
-export PATH="${HOMEBREW_PREFIX}/opt/openssl/bin:$SCRIPTS_DIR:$PATH"
-
-if [[ -f "$ZSHRC_DIR/work.sh" ]]; then
-  source "$ZSHRC_DIR/work.sh"
-fi
+export PATH="${HOMEBREW_PREFIX}/opt/openssl/bin:$SCRIPTS_DIR:$PATH:""/Applications/IntelliJ IDEA CE.app/Contents/MacOS"
 
 source "$ZSHRC_DIR/proxy.sh"
 source "$ZSHRC_DIR/tmux.sh"
@@ -26,3 +22,8 @@ source "$ZSHRC_DIR/zoxide.sh"
 source "$ZSHRC_DIR/prompt.sh"
 source "$ZSHRC_DIR/host-specific.sh"
 source "$ZSHRC_DIR/todo.sh"
+
+if [[ -f "$ZSHRC_DIR/work.sh" ]]; then
+  source "$ZSHRC_DIR/work.sh"
+fi
+
