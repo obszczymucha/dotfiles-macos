@@ -82,7 +82,7 @@ function immutable_tmux() {
 
 function vc() {
   # shellcheck disable=2016
-  immutable_tmux nvim-config code 'nvim +"cd $HOME/.config/nvim" +HarpoonFirst'
+  immutable_tmux nvim-config code 'zsh -c "nvim +\"cd $HOME/.config/nvim\" +HarpoonFirst"'
 }
 
 function vcc() {
@@ -94,7 +94,7 @@ function vcc() {
 
 function rc() {
   # shellcheck disable=2016
-  immutable_tmux zshrc zshrc 'nvim ~/.dotfiles/current/.zshrc +"cd $ZSHRC_DIR" +HarpoonFirst'
+  immutable_tmux zshrc zshrc 'zsh -c "nvim ~/.dotfiles/current/.zshrc +\"cd $ZSHRC_DIR\" +HarpoonFirst"'
 }
 
 function tm() {
