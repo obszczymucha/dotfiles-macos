@@ -14,7 +14,7 @@ function main() {
     height=$((session_count + 4))
   fi
 
-  tmux display-popup -T "Sessions" -w "$width" -h "$height" -E "$SCRIPTS_DIR/tmux_select_session.sh"
+  tmux display-popup -S "fg=#806aba" -T "Sessions" -w "$width" -h "$height" -E "$SCRIPTS_DIR/tmux_select_session.sh"
 }
 
 main "$@"
