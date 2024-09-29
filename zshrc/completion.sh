@@ -17,6 +17,8 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' '+l:|=* r:|=*'
 zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"
 zstyle ":completion:*" menu no
 # zstyle ":fzf-tab:complete:cd:*" fzf-preview 'ls --color $realpath'
+# shellcheck disable=2046,2116
+zstyle ':fzf-tab:*' fzf-flags $(echo "FZF_DEFAULT_OPTS")
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' popup-smart-tab no # Disable fzf-tab tab key override.
 zstyle ':fzf-tab:*' fzf-bindings 'alt-j:down' 'alt-k:up' 'tab:accept'
