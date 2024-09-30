@@ -8,13 +8,29 @@ function main() {
 
   local session_count
   session_count=$(tmux list-sessions -F "#S" | wc -l | xargs)
-  local height=$((max_height + 4))
 
-  if [[ "$session_count" -lt "$max_height" ]]; then
-    height=$((session_count + 4))
+  if [[ "$session_count" -eq 1 ]]; then
+    return
   fi
 
-  tmux display-popup -S "fg=#806aba" -T "Sessions" -w "$width" -h "$height" -E "$SCRIPTS_DIR/tmux_select_session.sh"
+  local current_session
+  current_session=$(tmux display-message -p "#S")
+
+  if [[ "$session_count" -eq 2 ]]; then
+    local other_session
+    other_session=$(tmux list-sessions -F "#S" | grep -v "^$current_session\$")
+
+    tmux switch-client -t "$other_session"
+    return
+  fi
+
+  local height=$((max_height + 3))
+
+  if [[ "$session_count" -lt "$max_height" ]]; then
+    height=$((session_count + 3))
+  fi
+
+  tmux display-popup -S "fg=#806aba" -T "Sessions" -w "$width" -h "$height" -E "$SCRIPTS_DIR/tmux_select_session.sh $current_session"
 }
 
 main "$@"
