@@ -1,5 +1,6 @@
 # This is Git's per-user configuration file.
 [core]
+	excludesfile = $HOME/.gitignore_global
 # Please adapt and uncomment the following lines:
 #	user = alien
 #	email = alien@alien.obszczymucha
@@ -27,5 +28,3 @@
 	clean = git-lfs clean -- %f
 [commit]
 	gpgsign = true
-[safe]
-	directory = /usr/share/lightdm-another-gtk-greeter/themes
