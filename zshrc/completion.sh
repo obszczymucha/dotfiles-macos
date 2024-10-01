@@ -21,7 +21,7 @@ zstyle ":completion:*" menu no
 zstyle ':fzf-tab:*' fzf-flags $(echo "$FZF_DEFAULT_OPTS")
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' popup-smart-tab no # Disable fzf-tab tab key override.
-zstyle ':fzf-tab:*' fzf-bindings 'alt-j:down' 'alt-k:up' 'tab:accept'
+zstyle ':fzf-tab:*' fzf-bindings 'alt-q:close' 'alt-j:down' 'alt-k:up'
 
 autoload -U compinit && compinit
 compdef -d play
