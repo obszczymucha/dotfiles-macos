@@ -2,7 +2,7 @@
 
 function main() {
   local min_length=10
-  local max_height=20
+  local max_height=25
   local width
   width=$(tmux list-sessions -F "#S" | awk -v min_length="$min_length" '{ if (length($0) > max) { max = length($0); longest = length($0) } } END { if (longest < min_length) { print min_length + 2 } else { print longest + 5 } }')
 
