@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 window_count() {
-  tmux list-windows | wc -l
+  tmux list-windows | wc -l | xargs
 }
 
 pane_count() {
-  tmux list-panes | wc -l
+  tmux list-panes | wc -l | xargs
 }
 
 window_has_two_panes() {
@@ -51,7 +51,7 @@ main() {
   local next_window_index
   next_window_index=$((current_window_index + 1))
 
-  if [[ $next_window_index -gt $panes ]]; then
+  if [[ "$next_window_index" -gt "$windows" ]]; then
     return
   fi
 
