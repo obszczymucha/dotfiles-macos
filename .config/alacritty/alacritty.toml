@@ -3,7 +3,7 @@ live_config_reload = true
 [window]
 decorations = "none"
 dynamic_padding = false
-opacity = 0.7
+opacity = 0.8
 startup_mode = "Maximized"
 option_as_alt = "OnlyLeft"
 
@@ -13,7 +13,26 @@ lines = 0
 
 [window.padding]
 x = 3
-y = 2
+y = 0
+
+[font]
+size = 18
+
+[font.bold]
+family = "RobotoMono Nerd Font"
+style = "Regular"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.normal]
+family = "RobotoMono Nerd Font"
+style = "Light"
+
+[font.offset]
+x = 0
+y = 0
 
 [bell]
 animation = "EaseOutExpo"
@@ -52,25 +71,6 @@ foreground = "0x20c0ff"
 [cursor]
 style = "Block"
 unfocused_hollow = true
-
-[font]
-size = 19
-
-[font.bold]
-family = "RobotoMono Nerd Font"
-style = "Regular"
-
-[font.glyph_offset]
-x = 0
-y = 0
-
-[font.normal]
-family = "RobotoMono Nerd Font"
-style = "Light"
-
-[font.offset]
-x = 0
-y = 0
 
 [hints]
 alphabet = "asdfjkl"
