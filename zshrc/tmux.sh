@@ -6,6 +6,7 @@ alias ta="t a"
 alias tn="t new-session -d"
 alias tmsg=tmux_message
 alias cm="immutable_tmux cmus cmus cmus"
+alias sss='stmux sessions save'
 
 TMUX_MESSAGE_BRB_FILE="$HOME/.tmux.message.brb"
 
