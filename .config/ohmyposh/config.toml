@@ -58,6 +58,13 @@ console_title_template = "{{ .Shell }} in {{ .Folder }}"
       fetch_status = true
       native_fallback = true
 
+  [[blocks.segments]]
+    type = "python"
+    style = "plain"
+    foreground = "#906cff"
+    background = "transparent"
+    template = " {{ if .Venv }}{{ .Venv }}{{ end }}"
+
 [[blocks]]
   type = "prompt"
   alignment = "left"
