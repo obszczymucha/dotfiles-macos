@@ -8,7 +8,7 @@ alias hostname="cat /etc/hostname"
 alias pwdp='pwd -P'
 alias x=exit
 alias gpgtty='export GPG_TTY=$TTY'
-alias vrc='nvim ~/.zshrc +"cd $ZSHRC_DIR" +HarpoonFirst'
+alias vrc='nvim ~/.zshrc +"cd $ZSHRC_DIR"'
 alias ff="fastfetch"
 
 alias v_="nvim -u NONE"
@@ -52,7 +52,7 @@ function renvim() {
 
 function v() {
   if [[ $# -eq 0 ]]; then
-    nvim +"HarpoonFirst"
+    nvim
   else
     nvim "$@"
   fi
