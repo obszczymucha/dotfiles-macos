@@ -2,8 +2,8 @@ bindkey -e
 bindkey -r '^[' # by default this enables vi mode and fucks the other bindings up
 bindkey '^?' backward-delete-char
 bindkey '^[[3~' delete-char
-bindkey '^[j' history-search-forward
-bindkey '^[k' history-search-backward
+bindkey '^[i' history-search-forward
+bindkey '^[o' history-search-backward
 #bindkey '^[j' down-line-or-search
 #bindkey '^[k' up-line-or-search
 bindkey '^[h' backward-char
