@@ -127,6 +127,10 @@ function tm() {
   fi
 }
 
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  return
+fi
+
 if [[ -z $TMUX && -z $NO_TMUX && $USER != "root" ]]; then
   tmux_message
   exec tmux new-session -A -s main
