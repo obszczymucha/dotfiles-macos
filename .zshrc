@@ -2,9 +2,11 @@
 export DOTFILES_DIR="$HOME/.dotfiles/current"
 export SCRIPTS_DIR="$DOTFILES_DIR/Scripts"
 export ZSHRC_DIR="$DOTFILES_DIR"/zshrc
-export PATH="${HOMEBREW_PREFIX}/opt/openssl/bin:$SCRIPTS_DIR:$HOME/.cargo/bin:$PATH:""/Applications/IntelliJ IDEA CE.app/Contents/MacOS"
+export PATH="${HOMEBREW_PREFIX}/opt/openssl/bin:$SCRIPTS_DIR:$HOME/.cargo/bin:$PATH:""/Applications/IntelliJ IDEA CE.app/Contents/MacOS;$HOME/.local/bin"
+export PATH="$PATH:$HOME/.local/bin"
 
 source "$ZSHRC_DIR/proxy.sh"
+source "$ZSHRC_DIR/certs.sh"
 source "$ZSHRC_DIR/tmux.sh"
 source "$ZSHRC_DIR/zinit-setup.sh"
 source "$ZSHRC_DIR/plugins.sh"
