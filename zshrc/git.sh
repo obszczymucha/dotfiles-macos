@@ -16,6 +16,9 @@ alias gra='git restore .'
 alias gstu='git stash -u'
 alias gstp='git stash pop'
 alias git_bare_remote_config="git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
+alias gbrc='git_bare_remote_config'
+alias gbrcf='git_bare_remote_config && git fetch'
+alias gwa='git worktree add'
 
 function white() {
   echo -e "\0033[97m$*\0033[0m"
@@ -30,7 +33,7 @@ function gc() {
   git commit "$@"
 }
 
-alias gh="git log -1 --oneline"
+# alias gh="git log -1 --oneline"
 
 function ghash() {
   git rev-parse "$@" HEAD
@@ -214,6 +217,10 @@ function gdcp() {
 alias gcl > /dev/null && unalias gcl
 function gcl() {
   git clone "$@"
+}
+
+function gclb() {
+  git clone --bare "$@"
 }
 
 # shellcheck disable=2120
