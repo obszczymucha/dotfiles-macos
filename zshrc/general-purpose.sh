@@ -114,5 +114,6 @@ function fn() {
 }
 
 sourcex() {
-  set -a; source "$1"; set +a
+  set -a; # shellcheck disable=SC1090
+  source "$1"; set +a
 }
