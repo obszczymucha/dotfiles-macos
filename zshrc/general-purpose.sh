@@ -113,3 +113,6 @@ function fn() {
   nvim +"$line_number" +"normal! zz" "$full_path"
 }
 
+sourcex() {
+  set -a; source "$1"; set +a
+}
