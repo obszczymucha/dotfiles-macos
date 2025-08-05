@@ -1,23 +1,16 @@
 #!/usr/bin/env bash
 
-function get_next_layout() {
-  if [[ "$1" == *"{"* ]]; then
-    echo "even-vertical"
-  elif [[ "$1" == *"["* ]]; then
-    echo "even-horizontal"
-  else
-    echo "even-vertical"
-  fi
-}
+current_layout=$(tmux display-message -p '#{window_layout}')
 
-function main() {
-  local current_layout
-  current_layout=$(tmux display-message -p '#{window_layout}')
-  local next_layout
-  next_layout=$(get_next_layout "$current_layout")
-
-  tmux select-layout "$next_layout"
-}
-
-main "$@"
+if [[ "$current_layout" == *"{"* ]]; then
+  tmux set-option @saved_horizontal_layout "$current_layout"
+  saved_layout=$(tmux show-option -v @saved_vertical_layout 2>/dev/null)
+  tmux select-layout "${saved_layout:-even-vertical}"
+elif [[ "$current_layout" == *"["* ]]; then
+  tmux set-option @saved_vertical_layout "$current_layout"
+  saved_layout=$(tmux show-option -v @saved_horizontal_layout 2>/dev/null)
+  tmux select-layout "${saved_layout:-even-horizontal}"
+else
+  tmux select-layout "even-vertical"
+fi
 

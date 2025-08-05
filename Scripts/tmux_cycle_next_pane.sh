@@ -17,6 +17,7 @@ window_has_two_panes() {
 
 main() {
   local opt="$1"
+  local opt2="$2"
 
   local windows
   windows=$(window_count)
@@ -59,10 +60,9 @@ main() {
   tmux set-option @window-name "$window_name"
 
   if [[ "$opt" == "h" ]]; then
-    tmux join-pane -s "$next_window_index" -h
+    tmux join-pane -s "$next_window_index" -h ${opt2:+-l "$opt2"}
   else
-    tmux join-pane -s "$next_window_index" -v
-    tmux resize-pane -t 2 -y 13
+    tmux join-pane -s "$next_window_index" -v ${opt2:+-l "$opt2"}
   fi
 }
 
