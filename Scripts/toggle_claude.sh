@@ -20,9 +20,9 @@ main() {
     current_path=$(tmux display-message -p "#{pane_current_path}")
     
     if [[ "$opt" == "h" ]]; then
-      tmux split-window -h -c "$current_path" ${opt2:+-l "$opt2"} "source ~/src/lua/dotfiles/zshrc/work.sh && genai && poff && claude"
+      tmux split-window -h -c "$current_path" ${opt2:+-l "$opt2"} "source ~/src/lua/dotfiles/zshrc/work.sh && genai && poff && claude $3"
     else
-      tmux split-window -v -c "$current_path" ${opt2:+-l "$opt2"} "source ~/src/lua/dotfiles/zshrc/work.sh && genai && poff && claude"
+      tmux split-window -v -c "$current_path" ${opt2:+-l "$opt2"} "source ~/src/lua/dotfiles/zshrc/work.sh && genai && poff && claude $3"
     fi
   fi
 }
