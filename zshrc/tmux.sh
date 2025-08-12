@@ -81,11 +81,6 @@ function immutable_tmux() {
   fi
 }
 
-function vc() {
-  # shellcheck disable=2016
-  immutable_tmux nvim-config code 'zsh -c "nvim +\"cd $HOME/.config/nvim\""'
-}
-
 function vcc() {
   # shellcheck disable=2016
   tmux send-keys 'builtin cd "$HOME/.config/nvim"' Enter

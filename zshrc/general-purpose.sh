@@ -12,6 +12,7 @@ alias vrc='nvim ~/.zshrc +"cd $ZSHRC_DIR"'
 alias ff="fastfetch"
 
 alias v_="nvim -u NONE"
+alias vc="nvim ."
 alias vt='v $HOME/.tmux.conf'
 alias l > /dev/null && unalias l
 alias l="gls -lh --group-directories-first --color"
