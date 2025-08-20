@@ -8,16 +8,10 @@ pane_count() {
   tmux list-panes | wc -l | xargs
 }
 
-window_has_two_panes() {
-  local pane_count
-  pane_count=$(tmux list-panes -t "$1" -F '#{pane_id}' | wc -l)
-
-  [[ "$pane_count" -eq 2 ]] && return 0 || return 1
-}
-
 main() {
   local opt="$1"
   local opt2="$2"
+  local force="$3"
 
   local windows
   windows=$(window_count)
@@ -31,12 +25,12 @@ main() {
   local window_name
   window_name=$(tmux show-option -q @window-name | awk '{print $2}')
 
-  if [[ "$panes" -gt 1 ]]; then
+  if [[ "$panes" -gt 1 && -z "$force" ]]; then
     if [[ -n "$window_name" && "$window_name" != "" ]]; then
-      tmux break-pane -s 2 -d -a -n "$window_name"
+      tmux break-pane -s "$panes" -d -a -n "$window_name"
       tmux set-option -u @window-name
     else
-      tmux break-pane -s 2 -d -a
+      tmux break-pane -s "$panes" -d -a
     fi
 
     return
@@ -59,10 +53,14 @@ main() {
   window_name=$(tmux display-message -p -t "$next_window_index" '#{window_name}')
   tmux set-option @window-name "$window_name"
 
+  if [[ "$opt2" == "--" ]]; then
+    opt2=""
+  fi
+
   if [[ "$opt" == "h" ]]; then
-    tmux join-pane -s "$next_window_index" -h ${opt2:+-l "$opt2"}
+    tmux join-pane -d -s "${next_window_index}.1" -t "${current_window_index}.${panes}" -h ${opt2:+-l "$opt2"}
   else
-    tmux join-pane -s "$next_window_index" -v ${opt2:+-l "$opt2"}
+    tmux join-pane -d -s "${next_window_index}.1" -t "${current_window_index}.${panes}" -v ${opt2:+-l "$opt2"}
   fi
 }
 
