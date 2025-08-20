@@ -3,7 +3,7 @@
 COMMAND="source ~/src/lua/dotfiles/zshrc/work.sh && genai && poff && claude"
 
 count_panes() {
-  tmux list-panes | wc -l
+  tmux list-panes | wc -l | xargs
 }
 
 main() {
@@ -20,8 +20,6 @@ main() {
   if tmux list-windows -F '#W' | grep -q "^claude$"; then
     tmux select-window -t claude
   else
-    tmux set-option @window-name "claude"
-
     local current_path
     current_path=$(tmux display-message -p "#{pane_current_path}")
 
@@ -33,7 +31,10 @@ main() {
 
     local pane_count
     pane_count=$(count_panes)
-    tmux set -p -t "${current_window}.${pane_count}" @window-name "claude"
+
+    local current_window_index
+    current_window_index=$(tmux display-message -p '#{window_index}')
+    tmux set -p -t "${current_window_index}.${pane_count}" @window-name "claude"
   fi
 }
 
