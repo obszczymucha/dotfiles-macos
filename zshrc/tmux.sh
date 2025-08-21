@@ -7,9 +7,12 @@ alias tn="t new-session -d"
 alias tmsg=tmux_message
 alias cm="immutable_tmux cmus cmus cmus"
 alias sss='stmux sessions save'
-alias tmo="tmux show-options -g"
+alias tmo="tmux show-options"
+alias tmog="tmux show-options -g"
 alias tmow="tmux show-options -w"
 alias tmop="tmux show-options -p"
+alias tms="tmux set"
+alias tmsg="tmux set -g"
 alias tmsw="tmux set -w"
 alias tmsp="tmux set -p"
 
