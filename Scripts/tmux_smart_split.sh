@@ -77,6 +77,8 @@ join_pane() {
 
   if [[ "$new_split_size" == "--" ]]; then
     new_split_size=""
+  else
+    new_split_size=$((100 - new_split_size))
   fi
 
   local current_window_index
