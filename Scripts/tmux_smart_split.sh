@@ -78,7 +78,14 @@ join_pane() {
   if [[ "$new_split_size" == "--" ]]; then
     new_split_size=""
   else
-    new_split_size=$((100 - new_split_size))
+    if [[ "$new_split_size" == *% ]]; then
+      local percent=${new_split_size%\%}
+      local complement
+      complement=$((100 - percent))
+      new_split_size="${complement}%"
+    else
+      new_split_size=$((100 - new_split_size))
+    fi
   fi
 
   local current_window_index
