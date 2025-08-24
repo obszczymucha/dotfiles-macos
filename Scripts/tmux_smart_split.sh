@@ -48,7 +48,7 @@ create_window() {
 
 swap_pane() {
   local window_name="$1"
-  local pane_count="$2"
+  local pane_count="$2" # unused?
   local swap_window_name="$3"
 
   local current_window_index
@@ -99,10 +99,10 @@ join_pane() {
     tmux join-pane -d -s "${swap_window_name}.1" -t "${current_window_index}.${pane_count}" -v ${new_split_size:+-l "$new_split_size"}
   fi
 
-  local new_pane_count
-  new_pane_count=$(count_panes)
+  # local new_pane_count
+  # new_pane_count=$(count_panes)
 
-  tmux select-pane -t "$new_pane_count"
+  # tmux select-pane -t "$new_pane_count"
 }
 
 join_next_pane() {
@@ -160,35 +160,43 @@ main() {
   local pane_count
   pane_count=$(count_panes)
 
-  if [[ -z "$swap_window_name" && "$window_count" -eq 1 && "$pane_count" -eq 1 ]]; then
+  if [[ -z "$swap_window_name" ]]; then
+    if [[ "$window_count" -eq 1 && "$pane_count" -eq 1 ]]; then
+      return
+    fi
+
+    if [[ "$pane_count" -gt 1 ]]; then
+      break_pane "$pane_count"
+      return
+    fi
+
+    join_next_pane "$window_count" "$pane_count" "$new_split_size" "$orientation"
     return
   fi
 
-  if [[ -z "$swap_window_name" && "$pane_count" -gt 1 ]]; then
+  local current_window_name
+  current_window_name=$(tmux display-message -p '#W')
+
+  if [[ "$swap_window_name" == "$current_window_name" ]]; then
+    return
+  fi
+
+  if [[ "$pane_count" -gt 1 ]] && is_second_pane_the_window "$swap_window_name"; then
     break_pane "$pane_count"
     return
   fi
 
-  if [[ -n "$swap_window_name" && "$pane_count" -gt 1 ]] && is_second_pane_the_window "$swap_window_name"; then
-    break_pane "$pane_count"
-    return
-  fi
-
-  if [[ -n "$swap_window_name" ]] && ! window_exists "$swap_window_name"; then
+  if ! window_exists "$swap_window_name"; then
     create_window "$swap_window_name"
   fi
 
-  if [[ -n "$swap_window_name" && "$pane_count" -gt 1 ]]; then
+  if [[ "$pane_count" -gt 1 ]]; then
     swap_pane "$window_name" "$pane_count" "$swap_window_name"
     return
   fi
 
-  if [[ -n "$swap_window_name" ]]; then
-    join_pane "$pane_count" "$new_split_size" "$swap_window_name" "$orientation"
-    return
-  fi
-
-  join_next_pane "$window_count" "$pane_count" "$new_split_size" "$orientation"
+  join_pane "$pane_count" "$new_split_size" "$swap_window_name" "$orientation"
+  return
 }
 
 main "$@"
