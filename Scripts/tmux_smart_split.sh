@@ -99,6 +99,17 @@ join_pane() {
     tmux join-pane -d -s "${swap_window_name}.1" -t "${current_window_index}.${pane_count}" -v ${new_split_size:+-l "$new_split_size"}
   fi
 
+  if tmux list-windows -f "#{==:#W,${swap_window_name}}" -F '#W' | grep -q .; then
+    local new_window_name
+    new_window_name=$(tmux show-option -p -t "${swap_window_name}.1" -qv @window-name)
+
+    if [[ -n "$new_window_name" && "$new_window_name" != "" ]]; then
+      tmux rename-window -t "${swap_window_name}" "$new_window_name"
+    else
+      tmux rename-window -t "${swap_window_name}" "window_$((RANDOM % 100))"
+    fi
+  fi
+
   # local new_pane_count
   # new_pane_count=$(count_panes)
 
@@ -138,12 +149,10 @@ join_next_pane() {
   fi
 }
 
-is_second_pane_the_window() {
+is_any_pane_the_window() {
   local swap_window_name="$1"
-  local window_name
-  window_name=$(tmux show-option -p -t 2 -v @window-name)
 
-  if [[ "$swap_window_name" == "$window_name" ]]; then
+  if tmux list-panes -F '#{@window-name}' | grep "$swap_window_name" >/dev/null; then
     return 0
   else
     return 1
@@ -181,7 +190,7 @@ main() {
     return
   fi
 
-  if [[ "$pane_count" -gt 1 ]] && is_second_pane_the_window "$swap_window_name"; then
+  if [[ "$pane_count" -gt 1 ]] && is_any_pane_the_window "$swap_window_name"; then
     break_pane "$pane_count"
     return
   fi
