@@ -10,6 +10,7 @@ alias x=exit
 alias gpgtty='export GPG_TTY=$TTY'
 alias vrc='nvim ~/.zshrc +"cd $ZSHRC_DIR"'
 alias ff="fastfetch"
+alias sman="MANWIDTH=80 man"
 
 alias v_="nvim -u NONE"
 alias vc="nvim ."
