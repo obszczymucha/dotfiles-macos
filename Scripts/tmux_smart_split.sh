@@ -26,23 +26,16 @@ window_exists() {
 }
 
 break_pane() {
-  local pane_count="$1"
+  local pane="{right}"
   local window_name
-  window_name=$(tmux show-option -p -t "$pane_count" -v @window-name)
-
-  local current_window_index
-  current_window_index=$(tmux display-message -p '#{window_index}')
+  window_name=$(tmux show-option -p -t "$pane" -v @window-name)
 
   if [[ -n "$window_name" && "$window_name" != "" ]]; then
-    # local last_window_index
-    # last_window_index=$(tmux show-option -q -p -t "${current_window_index}.${pane_count}" -v @last-window-index)
-    # last_window_index=$((last_window_index - 1))
-
-    tmux break-pane -s "$pane_count" -d -a -n "$window_name" ${last_window_index:+-t ":$last_window_index"}
+    tmux break-pane -d -s "$pane" -n "$window_name" ${last_window_index:+-t ":$last_window_index"}
   else
     local new_name
     new_name=$(random_name)
-    tmux break-pane -s "$pane_count" -d -a -n "$new_name"
+    tmux break-pane -s "$pane" -d -a -n "$new_name"
   fi
 
   local current_window_pane_count
@@ -53,11 +46,11 @@ break_pane() {
     window_name=$(tmux show-option -p -t 1 -qv @window-name)
 
     if [[ -n "$window_name" && "$window_name" != "" ]]; then
-      tmux rename-window -t "${current_window_index}" "$window_name"
+      tmux rename-window "$window_name"
     else
       local new_name
       new_name=$(random_name)
-      tmux rename-window -t "${current_window_index}" "$new_name"
+      tmux rename-window "$new_name"
       tmux set-option -p -t ".1" @window-name "$new_name"
     fi
   fi
@@ -113,9 +106,6 @@ join_pane() {
   fi
 
   local current_window_index
-  swap_window_index=$(tmux display-message -t "${swap_window_name}" -p '#{window_index}')
-
-  # tmux set -p -t "${swap_window_name}.1" @last-window-index "$swap_window_index"
 
   if [[ "$orientation" == "h" ]]; then
     tmux join-pane ${params:+"$params"} -s "${swap_window_name}.1" -t "${current_window_index}.${pane_count}" -h ${new_split_size:+-l "$new_split_size"}
