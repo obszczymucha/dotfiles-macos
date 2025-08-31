@@ -136,6 +136,6 @@ fi
 
 if [[ -z $TMUX && -z $NO_TMUX && $USER != "root" ]]; then
   tmux_message
-  exec tmux new-session -A -s main -n shell
+  exec tmux new-session -A -s main -n home
 fi
 
