@@ -88,6 +88,7 @@ join_pane() {
   local swap_window_name="$3"
   local orientation="$4"
   local params="$5"
+  local window_created="$6"
 
   local current_window_index
   current_window_index=$(tmux display-message -p '#{window_index}')
@@ -126,10 +127,9 @@ join_pane() {
     fi
   fi
 
-  # local new_pane_count
-  # new_pane_count=$(count_panes)
-
-  # tmux select-pane -t "$new_pane_count"
+  if [[ "$window_created" == true ]]; then
+    tmux select-pane -t -1
+  fi
 }
 
 join_next_pane() {
@@ -212,8 +212,11 @@ main() {
     return
   fi
 
+  local window_created=false
+
   if ! window_exists "$swap_window_name"; then
     create_window "$swap_window_name"
+    window_created=true
   fi
 
   if [[ "$pane_count" -gt 1 ]]; then
@@ -221,7 +224,7 @@ main() {
     return
   fi
 
-  join_pane "$pane_count" "$new_split_size" "$swap_window_name" "$orientation" "$params"
+  join_pane "$pane_count" "$new_split_size" "$swap_window_name" "$orientation" "$params" "$window_created"
   return
 }
 
