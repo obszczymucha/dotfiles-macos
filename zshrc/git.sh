@@ -19,6 +19,7 @@ alias git_bare_remote_config="git config remote.origin.fetch '+refs/heads/*:refs
 alias gbrc='git_bare_remote_config'
 alias gbrcf='git_bare_remote_config && git fetch'
 alias gwa='git worktree add'
+alias gf='git fetch'
 
 function white() {
   echo -e "\0033[97m$*\0033[0m"
