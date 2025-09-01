@@ -42,6 +42,12 @@ main() {
   pane_count=$(count_panes)
 
   if [[ "$pane_count" -eq 1 ]]; then
+    if [[ "$adjustment" == "-" ]]; then
+      local margin
+      margin=$(tmux show-option -gv @horizontal-split-margin)
+      "$SCRIPTS_DIR/tmux_smart_split.sh" h "$margin" && stmux status
+    fi
+
     return
   fi
 
@@ -74,7 +80,7 @@ main() {
     resize_pane 1 "$margin"
     return
   elif [[ "$adjustment" == "+" && "$size" -ge "$margin" ]]; then
-    echo "split" >&2
+    "$SCRIPTS_DIR/tmux_smart_split.sh" h -- -- -d
     return
   fi
 }

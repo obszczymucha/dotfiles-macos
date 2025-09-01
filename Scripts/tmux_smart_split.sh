@@ -12,6 +12,19 @@ random_name() {
   echo "win_$((RANDOM % 100))"
 }
 
+calculate_split_size() {
+  local new_split_size="$1"
+
+  if [[ "$new_split_size" == *% ]]; then
+    local percent=${new_split_size%\%}
+    local complement
+    complement=$((100 - percent))
+    echo "${complement}%"
+  else
+    echo $((100 - new_split_size))
+  fi
+}
+
 window_exists() {
   local window_list
   window_list=$(tmux list-windows -F '#{window_name}')
@@ -26,33 +39,36 @@ window_exists() {
 }
 
 break_pane() {
-  local pane="{right}"
-  local window_name
-  window_name=$(tmux show-option -p -t "$pane" -v @window-name)
+  local focus="$1"
+  local pane="{bottom-right}"
+  local new_window_name
+  new_window_name=$(tmux show-option -p -t "$pane" -v @window-name)
 
-  if [[ -n "$window_name" && "$window_name" != "" ]]; then
-    tmux break-pane -d -s "$pane" -n "$window_name" ${last_window_index:+-t ":$last_window_index"}
-  else
-    local new_name
-    new_name=$(random_name)
-    tmux break-pane -s "$pane" -d -a -n "$new_name"
+  if [[ -z "$new_window_name" || "$new_window_name" == "" ]]; then
+    new_window_name=$(random_name)
   fi
+
+  tmux break-pane -s "$pane" -d -a -n "$new_window_name"
 
   local current_window_pane_count
   current_window_pane_count=$(tmux display-message -p '#{window_panes}')
 
   if [[ "$current_window_pane_count" -eq 1 ]]; then
-    local window_name
-    window_name=$(tmux show-option -p -t 1 -qv @window-name)
+    local current_window_name
+    current_window_name=$(tmux show-option -p -t 1 -qv @window-name)
 
-    if [[ -n "$window_name" && "$window_name" != "" ]]; then
-      tmux rename-window "$window_name"
+    if [[ -n "$current_window_name" && "$new_window_name" != "" ]]; then
+      tmux rename-window "$current_window_name"
     else
       local new_name
       new_name=$(random_name)
       tmux rename-window "$new_name"
       tmux set-option -p -t ".1" @window-name "$new_name"
     fi
+  fi
+
+  if [[ "$focus" == true ]]; then
+    tmux select-window -t "$new_window_name"
   fi
 }
 
@@ -96,14 +112,7 @@ join_pane() {
   if [[ "$new_split_size" == "--" ]]; then
     new_split_size=""
   else
-    if [[ "$new_split_size" == *% ]]; then
-      local percent=${new_split_size%\%}
-      local complement
-      complement=$((100 - percent))
-      new_split_size="${complement}%"
-    else
-      new_split_size=$((100 - new_split_size))
-    fi
+    new_split_size=$(calculate_split_size "$new_split_size")
   fi
 
   local current_window_index
@@ -154,8 +163,10 @@ join_next_pane() {
 
   window_name=$(tmux display-message -p -t "$next_window_index" '#{window_name}')
 
-  if [[ "$new_split_size" == "--" ]]; then
+  if [[ -z "$new_split_size" || "$new_split_size" == "--" ]]; then
     new_split_size=""
+  else
+    new_split_size=$(calculate_split_size "$new_split_size")
   fi
 
   if [[ "$orientation" == "h" ]]; then
@@ -181,18 +192,25 @@ main() {
   local swap_window_name="$3"
   local params="$4"
 
+  local focus=false
+
+  if [[ "$orientation" == "hf" ]]; then
+    orientation="h"
+    focus=true
+  fi
+
   local window_count
   window_count=$(count_windows)
   local pane_count
   pane_count=$(count_panes)
 
-  if [[ -z "$swap_window_name" ]]; then
+  if [[ -z "$swap_window_name" || "$swap_window_name" == "--" ]]; then
     if [[ "$window_count" -eq 1 && "$pane_count" -eq 1 ]]; then
       return
     fi
 
     if [[ "$pane_count" -gt 1 ]]; then
-      break_pane "$pane_count"
+      break_pane "$focus"
       return
     fi
 
