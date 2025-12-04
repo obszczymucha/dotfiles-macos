@@ -16,9 +16,9 @@ alias v_="nvim -u NONE"
 alias vc="nvim ."
 alias vt='v $HOME/.tmux.conf'
 alias l > /dev/null && unalias l
-alias l="gls -lh --group-directories-first --color"
+alias l="gls -lh --group-directories-first --color | gsed '1{/^total/d}'"
 alias ll > /dev/null && unalias ll
-alias ll="gls -lah --group-directories-first --color"
+alias ll="gls -lah --group-directories-first --color | gsed '1{/^total/d}'"
 alias la > /dev/null && unalias la
 alias la=ll
 alias cl="c && l"
