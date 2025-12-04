@@ -81,19 +81,19 @@ export DIRSTACKSIZE=8
 setopt autopushd pushdminus pushdsilent pushdtohome
 alias dh='dirs -v'
 
-function cd() {
-  local error
-  error=$(builtin cd "$@" 2>&1 > /dev/null || return)
-  local result=$?
-
-  if [[ ! $result == "0" ]]; then
-    # shellcheck disable=2001
-    echo "$error" | sed -E 's/^cd:cd:[^:]+: //g' | sed -E 's/^(.)/\U\1/' >&2
-    return $result
+cd() {
+  if builtin cd "$@" 2>/dev/null; then
+    autols 2>/dev/null || true
+    if [[ -n "$LAST_DIRECTORY_FILE" ]]; then
+        pwd > "$LAST_DIRECTORY_FILE"
+    fi
   else
-    builtin cd "$@" || return
-    autols
-    pwd > "$LAST_DIRECTORY_FILE"
+    local error
+    # shellcheck disable=2164
+    error=$(builtin cd "$@" 2>&1 >/dev/null)
+    local result=$?
+    echo "$error" | gsed -E 's/^cd:cd:[^:]+: //g' | gsed -E 's/^(.)/\U\1/' >&2
+    return $result
   fi
 }
 
