@@ -120,11 +120,11 @@ function tm() {
     if [[ $window_count -eq 1 ]]; then
       tmux rename-session "$session_name"
       tmux rename-window "code"
-      tmux new-window -d -n "shell" "NO_CD=1 $SHELL"
+      # tmux new-window -d -n "shell" "NO_CD=1 $SHELL"
     else
       tmux new-session -d -s "$session_name" -n code "cd '$start_dir'; $SHELL"
-      tmux new-window -t "$session_name:2" -n shell
-      tmux select-window -t "${session_name}:1"
+      # tmux new-window -t "$session_name:2" -n shell
+      # tmux select-window -t "${session_name}:1"
       tmux switch-client -t "$session_name"
     fi
   fi
