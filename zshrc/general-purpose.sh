@@ -27,6 +27,7 @@ alias src="NO_TMUX=1 NO_CD=1 source ~/.zshrc"
 alias dcu="docker-compose up --remove-orphans"
 alias dcr="docker-compose run --remove-orphans --service-ports"
 alias dcrb="dcr --build"
+alias python="/opt/homebrew/bin/python3.14"
 
 function stow-dotfiles() {
   local pushed=false
