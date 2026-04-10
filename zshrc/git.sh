@@ -221,7 +221,10 @@ function gcl() {
 }
 
 function gclb() {
-  git clone --bare "$@"
+  local name
+  name=$(basename "$1" | sed 's/\.git$//')
+
+  git clone --bare "$1" "${name}/.git" && builtin cd "$name" && gbrcf
 }
 
 # shellcheck disable=2120
