@@ -40,11 +40,33 @@ function ghash() {
   git rev-parse "$@" HEAD
 }
 
+git_set_upstream() {
+  local branch_name
+  branch_name=$(git rev-parse --abbrev-ref HEAD)
+  local expected="origin/${branch_name}"
+
+  if upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @\{u\}) &>/dev/null; then
+    if [[ "$upstream" == "$expected" ]]; then
+      return
+    fi
+  fi
+
+  if git show-ref --verify "refs/remotes/$expected" &>/dev/null; then
+    git branch --set-upstream-to="$expected"
+  fi
+}
+
 function gp() {
   if [[ $# -gt 1 ]]; then
     local cmd="git push $*"
     echo "Running: $(white "$cmd")" >&2
-    eval "$cmd"
+
+    if [[ "$*" == *:* ]]; then
+      eval "$cmd"
+    else
+      eval "$cmd" && git_set_upstream
+    fi
+
     return
   fi
 
@@ -56,7 +78,7 @@ function gp() {
 
   local cmd="git push origin $branch"
   echo "Running: $(white "$cmd")" >&2
-  eval "$cmd"
+  eval "$cmd" && git_set_upstream
 }
 
 function filter_empty_args() {
