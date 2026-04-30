@@ -18,8 +18,21 @@ alias gstp='git stash pop'
 alias git_bare_remote_config="git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
 alias gbrc='git_bare_remote_config'
 alias gbrcf='git_bare_remote_config && git fetch'
-alias gwa='git worktree add'
 alias gf='git fetch'
+alias gwr='git worktree remove'
+
+gwa() {
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: gwa <worktree_name> [base_branch]"
+    return 1
+  fi
+
+  if [[ $# -eq 1 ]]; then
+    git worktree add -b "$1" "$1"
+  else
+    git worktree add -b "$1" "$1" "$2"
+  fi
+}
 
 function white() {
   echo -e "\0033[97m$*\0033[0m"
