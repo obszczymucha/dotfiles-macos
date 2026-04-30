@@ -87,9 +87,9 @@ function fn() {
 
       local grep_expression="^alias ${funcname} *="
       # shellcheck disable=2046
-      read -r full_path line_number <<< $(ggrep -nr "$grep_expression" "$search_dir" | head -n 1 | gsed -E 's/^(.+):([0-9]+):.*$/\1 \2/g')
+      read -r full_path line_number <<< $(ugrep -nr "$grep_expression" "$search_dir" | head -n 1 | gsed -E 's/^(.+):([0-9]+):.*$/\1 \2/g')
     else
-      line_number=$(ggrep -En "(^${funcname}\(\)| ${funcname}\(\))" "$full_path" | head -n 1 | gsed -E 's/^([0-9]+):.*$/\1/g')
+      line_number=$(ugrep -En "(^${funcname}\(\)| ${funcname}\(\))" "$full_path" | head -n 1 | gsed -E 's/^([0-9]+):.*$/\1/g')
     fi
 
     if [[ -z "$full_path" ]]; then
