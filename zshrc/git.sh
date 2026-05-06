@@ -28,6 +28,12 @@ gwa() {
   fi
 
   if [[ $# -eq 1 ]]; then
+    if git show-ref --verify --quiet "refs/heads/$1"; then
+      echo "Branch $1 already exists. Using it." >&2
+      git worktree add "$1"
+      return
+    fi
+
     git worktree add -b "$1" "$1"
   else
     git worktree add -b "$1" "$1" "$2"
